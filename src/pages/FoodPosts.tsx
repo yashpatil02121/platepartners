@@ -123,14 +123,17 @@ const requestPickup = async (postId: string) => {
 }
 
 const updateRequest = async (requestId: string, status: string) => {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("requests")
     .update({ status })
     .eq("id", requestId)
+    .select()
+
+  console.log("Updated:", data)
 
   if (error) {
     console.error(error)
-    alert("Failed to update request")
+    alert(error.message)
     return
   }
 
@@ -243,25 +246,38 @@ return (
               </span>
 
               {isOwner ? (
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => updateRequest(req.id, "accepted")}
-                    className="bg-green-500 text-white px-2 py-1 rounded text-xs"
-                  >
-                    Accept
-                  </button>
-                  <button
-                    onClick={() => updateRequest(req.id, "rejected")}
-                    className="bg-red-500 text-white px-2 py-1 rounded text-xs"
-                  >
-                    Reject
-                  </button>
-                </div>
-              ) : (
-                <span className="text-yellow-600">
-                  {req.status}
-                </span>
-              )}
+  req.status === "pending" ? (
+    <div className="flex gap-2">
+      <button
+        onClick={() => updateRequest(req.id, "approved")}
+        className="bg-green-500 text-white px-2 py-1 rounded text-xs"
+      >
+        Accept
+      </button>
+
+      <button
+        onClick={() => updateRequest(req.id, "rejected")}
+        className="bg-red-500 text-white px-2 py-1 rounded text-xs"
+      >
+        Reject
+      </button>
+    </div>
+  ) : (
+    <span
+      className={`text-xs font-medium ${
+        req.status === "approved"
+          ? "text-green-600"
+          : "text-red-600"
+      }`}
+    >
+      {req.status}
+    </span>
+  )
+                ) : (
+                  <span className="text-yellow-600">
+                    {req.status}
+                  </span>
+                )}
             </div>
           ))}
         </div>
