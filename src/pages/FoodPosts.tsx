@@ -6,6 +6,7 @@ export default function FoodPosts() {
   const [posts, setPosts] = useState<any[]>([])
   const [userId, setUserId] = useState<string | null>(null)
   const [openModal, setOpenModal] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("")
 
   useEffect(() => {
     fetchPosts()
@@ -108,8 +109,26 @@ const updateRequest = async (requestId: string, status: string) => {
   return (
     <div className="p-6 max-w-3xl mx-auto">
 
+      {/* 🔍 Search Bar */}
+<input
+  type="text"
+  placeholder="Search by food or location..."
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(e.target.value)}
+  className="w-full mb-4 p-2 border rounded"
+/>
+
       {/* Posts */}
-      {posts.map((post) => {
+      {posts
+  .filter((post) => {
+    const term = searchTerm.toLowerCase()
+
+    return (
+      post.title?.toLowerCase().includes(term) ||
+      post.pickup_location?.toLowerCase().includes(term)
+    )
+  })
+  .map((post) => {
         const isOwner = post.user_id === userId
 
         const alreadyRequested = post.requests?.some(
