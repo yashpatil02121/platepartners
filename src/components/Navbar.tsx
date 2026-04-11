@@ -1,6 +1,7 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation  } from "react-router-dom"
 import { supabase } from "../lib/supabase"
+import { ArrowLeft } from "lucide-react"
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
@@ -11,8 +12,23 @@ export default function Navbar() {
     navigate("/")
   }
 
+  const location = useLocation()
+  const showBack = location.pathname !== "/home"
+
   return (
-    <div className="w-full bg-white shadow px-4 py-3 flex justify-between items-center">
+  <div className="w-full bg-white shadow px-4 py-3 flex justify-between items-center">
+
+    {/* LEFT SECTION */}
+    <div className="flex items-center gap-3">
+
+     {showBack && (
+        <button
+            onClick={() => navigate(-1)}
+            className="p-1 hover:bg-gray-100 rounded"
+        >
+            <ArrowLeft size={20} />
+        </button>
+        )}
       {/* App Name */}
       <h1
         onClick={() => navigate("/home")}
@@ -20,49 +36,49 @@ export default function Navbar() {
       >
         PlatePartners 🍱
       </h1>
-
-      {/* Menu Icon */}
-      <div className="relative">
-        <button
-          onClick={() => setOpen(!open)}
-          className="text-2xl"
-        >
-          ☰
-        </button>
-
-        {/* Dropdown */}
-        {open && (
-          <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow">
-            <button
-              onClick={() => navigate("/profile")}
-              className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-            >
-              Profile
-            </button>
-
-            <button
-              onClick={() => navigate("/about")}
-              className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-            >
-              About
-            </button>
-
-            <button
-              onClick={() => navigate("/contact")}
-              className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-            >
-              Contact Us
-            </button>
-
-            <button
-              onClick={handleLogout}
-              className="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100"
-            >
-              Logout
-            </button>
-          </div>
-        )}
-      </div>
     </div>
-  )
+
+    {/* RIGHT SECTION */}
+    <div className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="text-2xl"
+      >
+        ☰
+      </button>
+
+      {open && (
+        <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow">
+          <button
+            onClick={() => navigate("/profile")}
+            className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+          >
+            Profile
+          </button>
+
+          <button
+            onClick={() => navigate("/about")}
+            className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+          >
+            About
+          </button>
+
+          <button
+            onClick={() => navigate("/contact")}
+            className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+          >
+            Contact Us
+          </button>
+
+          <button
+            onClick={handleLogout}
+            className="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100"
+          >
+            Logout
+          </button>
+        </div>
+      )}
+    </div>
+  </div>
+)
 }
