@@ -2,12 +2,14 @@ import { useEffect, useState } from "react"
 import { supabase } from "../lib/supabase"
 import AddPostModal from "../components/AddPostModal"
 import Navbar from "../components/Navbar"
+import { ChevronDown } from "lucide-react"
 
 export default function FoodPosts() {
   const [posts, setPosts] = useState<any[]>([])
   const [userId, setUserId] = useState<string | null>(null)
   const [openModal, setOpenModal] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
+  const [openPostId, setOpenPostId] = useState<string | null>(null)
 
   useEffect(() => {
     fetchPosts()
@@ -171,79 +173,102 @@ return (
           )
 
           return (
-            <div key={post.id} className="bg-white p-4 mb-3 rounded shadow">
+            <div key={post.id} className="bg-white/40 backdrop-blur-md rounded-xl mb-3 border border-white/20 shadow">
 
-              <h3 className="font-bold">{post.title}</h3>
-              
-              <p className="text-gray-600 mb-2 text-xs">{post.pickup_location}</p>
+  {/* HEADER (Always visible) */}
+  <div
+    onClick={() =>
+      setOpenPostId(openPostId === post.id ? null : post.id)
+    }
+    className="flex justify-between items-center p-4 cursor-pointer"
+  >
+    <div>
+      <h3 className="font-semibold text-gray-800">{post.title}</h3>
+      <p className="text-xs text-gray-500">{post.pickup_location}</p>
+    </div>
 
-              {/* ✅ Image */}
-              {post.image_url && (
-                <img
-                  src={post.image_url}
-                  alt="food"
-                  className="w-full h-40 object-cover rounded mb-2"
-                />
-              )}
+    {/* ICON */}
+    <ChevronDown
+  className={`transition-transform ${
+    openPostId === post.id ? "rotate-180" : ""
+  }`}
+/>
+  </div>
 
+  {/* COLLAPSIBLE CONTENT */}
+  {openPostId === post.id && (
+    <div className="px-4 pb-4">
 
-              {/* Buttons */}
-              {!isOwner && !alreadyRequested && (
-                <button
-                  onClick={() => requestPickup(post.id)}
-                  className="mt-2 bg-blue-500 text-white px-3 py-1 rounded"
-                >
-                  Request Pickup
-                </button>
-              )}
+      {/* Image */}
+      {post.image_url && (
+        <img
+          src={post.image_url}
+          alt="food"
+          className="w-full h-40 object-cover rounded mb-3"
+        />
+      )}
 
-              {!isOwner && alreadyRequested && (
-                <p className="text-green-600 mt-2">Already Requested</p>
-              )}
+      {/* Buttons */}
+      {!isOwner && !alreadyRequested && (
+        <button
+          onClick={() => requestPickup(post.id)}
+          className="bg-blue-500 text-white px-3 py-1 rounded"
+        >
+          Request Pickup
+        </button>
+      )}
 
-              {isOwner && (
-                <p className="text-purple-600 mt-2 text-xs">Your Posted Help!</p>
-              )}
+      {!isOwner && alreadyRequested && (
+        <p className="text-green-600 mt-2">Already Requested</p>
+      )}
 
-              {/* Requests */}
-              {post.requests && post.requests.length > 0 && (
-                <div className="mt-3 border-t pt-2">
-                  <p className="text-sm font-semibold">Requests:</p>
+      {isOwner && (
+        <p className="text-purple-600 mt-2 text-xs">
+          Your Posted Help!
+        </p>
+      )}
 
-                  {post.requests.map((req: any) => (
-                    <div
-                      key={req.id}
-                      className="text-sm text-gray-600 flex justify-between items-center"
-                    >
-                      <span>
-                        Volunteer: {req.volunteer_id.slice(0, 6)}...
-                      </span>
+      {/* Requests */}
+      {post.requests && post.requests.length > 0 && (
+        <div className="mt-3 border-t pt-2">
+          <p className="text-sm font-semibold">Requests:</p>
 
-                      {isOwner ? (
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => updateRequest(req.id, "accepted")}
-                            className="bg-green-500 text-white px-2 py-1 rounded text-xs"
-                          >
-                            Accept
-                          </button>
-                          <button
-                            onClick={() => updateRequest(req.id, "rejected")}
-                            className="bg-red-500 text-white px-2 py-1 rounded text-xs"
-                          >
-                            Reject
-                          </button>
-                        </div>
-                      ) : (
-                        <span className="text-yellow-600">
-                          {req.status}
-                        </span>
-                      )}
-                    </div>
-                  ))}
+          {post.requests.map((req: any) => (
+            <div
+              key={req.id}
+              className="text-sm text-gray-600 flex justify-between items-center"
+            >
+              <span>
+                Volunteer: {req.volunteer_id.slice(0, 6)}...
+              </span>
+
+              {isOwner ? (
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => updateRequest(req.id, "accepted")}
+                    className="bg-green-500 text-white px-2 py-1 rounded text-xs"
+                  >
+                    Accept
+                  </button>
+                  <button
+                    onClick={() => updateRequest(req.id, "rejected")}
+                    className="bg-red-500 text-white px-2 py-1 rounded text-xs"
+                  >
+                    Reject
+                  </button>
                 </div>
+              ) : (
+                <span className="text-yellow-600">
+                  {req.status}
+                </span>
               )}
             </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )}
+</div>
           )
         })}
     </div>
