@@ -35,29 +35,75 @@ export default function Home() {
     setupUser()
   }, [])
 
- return (
-  <div className="min-h-screen flex flex-col">
+return (
+  <div className="min-h-screen flex flex-col bg-gray-50">
 
     {/* ✅ Navbar */}
     <Navbar />
 
-    {/* Main Content */}
-    <div className="flex flex-col items-center justify-center text-center mt-16 p-6 flex-1">
-      <h1 className="text-3xl font-bold mb-4">
-        Welcome to PlatePartners 🍱
-      </h1>
+    {/* 🌟 SECTION 1 — HERO */}
+    <div className="flex flex-col items-center text-center mt-20 px-6">
 
-      <p className="mb-6 text-gray-600 max-w-md">
-        Share your extra food and help others. Reduce waste, spread kindness.
+
+      <p className="text-gray-700 max-w-xl mb-6">
+        Connecting people who want to help with those who need it.
       </p>
 
       <button
         onClick={() => navigate("/posts")}
-        className="bg-green-600 text-white px-6 py-2 rounded"
+        className="bg-green-600 hover:bg-green-700 transition text-white px-6 py-3 rounded-lg shadow"
       >
-        View Food Posts
+        Explore Food Posts
       </button>
     </div>
+
+    {/* 🔗 SECTION 2 — THE GAP */}
+    <div className="mt-16 px-6 max-w-3xl mx-auto text-center">
+      <h2 className="text-xl font-semibold mb-4">
+        The Gap We Bridge
+      </h2>
+
+      <p className="text-gray-600 mb-3">
+        Many people have extra food they are willing to share,
+        but they may not have the time or don’t know where to take it.
+      </p>
+
+      <p className="text-gray-600">
+        At the same time, there are people who know where help is needed
+        whether it’s individuals or street dogs and they are willing to step in.
+      </p>
+    </div>
+
+    {/* 🤝 SECTION 3 — HOW IT CONNECTS */}
+    <div className="mt-12 px-6 max-w-3xl mx-auto text-center">
+      <h2 className="text-xl font-semibold mb-4">
+        How PlatePartners Helps
+      </h2>
+
+      <p className="text-gray-600 mb-3">
+        PlatePartners brings these two groups together.
+      </p>
+
+      <p className="text-gray-600 mb-3">
+        You can share food if you have it, or you can collect and deliver it
+        if you have the time and know where it’s needed.
+      </p>
+
+      <p className="text-gray-700 font-medium">
+        Together, small actions turn into meaningful help for people and animals 🐶💚
+      </p>
+    </div>
+
+    {/* 🚀 FINAL CTA */}
+    <div className="mt-12 mb-10 text-center">
+      <button
+        onClick={() => navigate("/posts")}
+        className="bg-green-600 hover:bg-green-700 transition text-white px-6 py-3 rounded-lg shadow"
+      >
+        Start Helping
+      </button>
+    </div>
+
   </div>
 )
 }
