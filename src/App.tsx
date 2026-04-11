@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Login from "./pages/Login"
 import Home from "./pages/Home"
 import FoodPosts from "./pages/FoodPosts"
+import Profile from "./pages/Profile"
+import About from "./pages/About"
+import Contact from "./pages/Contact"
 import ProtectedRoute from "./components/ProtectedRoute"
 
 function App() {
@@ -25,6 +28,32 @@ function App() {
           element={
             <ProtectedRoute>
               <FoodPosts />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/about"
+          element={
+            <ProtectedRoute>
+              <About />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/contact"
+          element={
+            <ProtectedRoute>
+              <Contact />
             </ProtectedRoute>
           }
         />

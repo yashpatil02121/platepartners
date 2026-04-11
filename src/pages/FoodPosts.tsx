@@ -60,7 +60,7 @@ const addPost = async (
   if (file) {
     const filePath = `public/${Date.now()}-${file.name}`
 
-    const { data: uploadData, error: uploadError } =
+    const { error: uploadError } =
       await supabase.storage
         .from("food-images")
         .upload(filePath, file)
@@ -165,6 +165,7 @@ const updateRequest = async (requestId: string, status: string) => {
 
       return (
         <div key={post.id} className="bg-white p-4 mb-3 rounded shadow">
+          
           <h3 className="font-bold">{post.title}</h3>
           <p className="text-gray-600">{post.pickup_location}</p>
 
