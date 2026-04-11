@@ -29,12 +29,21 @@ export default function Navbar() {
             <ArrowLeft size={20} />
         </button>
         )}
+
+  {/* LOGO */}
+  <img
+    src="/pp_icon.png"
+    alt="PlatePartners Logo"
+    className="w-8 h-8 object-contain"
+  />
+
+
       {/* App Name */}
       <h1
         onClick={() => navigate("/home")}
         className="text-xl font-bold text-green-600 cursor-pointer"
       >
-        PlatePartners 🍱
+        PlatePartners
       </h1>
     </div>
 
