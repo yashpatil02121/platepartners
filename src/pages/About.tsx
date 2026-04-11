@@ -36,6 +36,12 @@ export default function About() {
           Our mission is simple: reduce waste, feed the hungry, care for animals,
           and build a culture of everyday kindness - one plate at a time.
         </p>
+
+        <div className="bg-green-50 p-4 rounded mt-4">
+        <p className="text-green-700 font-medium">
+            Anyone can contribute by sharing food or by delivering it to those who need it.
+        </p>
+        </div>
       </div>
     </div>
   )
