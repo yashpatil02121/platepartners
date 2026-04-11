@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { supabase } from "../lib/supabase"
 import AddPostModal from "../components/AddPostModal"
+import Navbar from "../components/Navbar"
 
 export default function FoodPosts() {
   const [posts, setPosts] = useState<any[]>([])
@@ -134,122 +135,131 @@ const updateRequest = async (requestId: string, status: string) => {
   fetchPosts()
 }
 
-  return (
+return (
+  <div className="min-h-screen">
+
+    {/* ✅ Navbar */}
+    <Navbar />
+
+    {/* Page Content */}
     <div className="p-6 max-w-3xl mx-auto">
 
       {/* 🔍 Search Bar */}
-<input
-  type="text"
-  placeholder="Search by food or location..."
-  value={searchTerm}
-  onChange={(e) => setSearchTerm(e.target.value)}
-  className="w-full mb-4 p-2 border rounded"
-/>
+      <input
+        type="text"
+        placeholder="Search by food or location..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="w-full mb-4 p-2 border rounded"
+      />
 
       {/* Posts */}
       {posts
-  .filter((post) => {
-    const term = searchTerm.toLowerCase()
+        .filter((post) => {
+          const term = searchTerm.toLowerCase()
 
-    return (
-      post.title?.toLowerCase().includes(term) ||
-      post.pickup_location?.toLowerCase().includes(term)
-    )
-  })
-  .map((post) => {
-        const isOwner = post.user_id === userId
+          return (
+            post.title?.toLowerCase().includes(term) ||
+            post.pickup_location?.toLowerCase().includes(term)
+          )
+        })
+        .map((post) => {
+          const isOwner = post.user_id === userId
 
-        const alreadyRequested = post.requests?.some(
-          (r: any) => r.volunteer_id === userId
-        )
+          const alreadyRequested = post.requests?.some(
+            (r: any) => r.volunteer_id === userId
+          )
 
-      return (
-        <div key={post.id} className="bg-white p-4 mb-3 rounded shadow">
-          
-          <h3 className="font-bold">{post.title}</h3>
-          <p className="text-gray-600">{post.pickup_location}</p>
+          return (
+            <div key={post.id} className="bg-white p-4 mb-3 rounded shadow">
 
-          {/* ✅ Conditional Button */}
-          {/* ✅ If NOT owner AND NOT already requested */}
-          {!isOwner && !alreadyRequested && (
-            <button
-              onClick={() => requestPickup(post.id)}
-              className="mt-2 bg-blue-500 text-white px-3 py-1 rounded"
-            >
-              Request Pickup
-            </button>
-          )}
+              {/* ✅ Image */}
+              {post.image_url && (
+                <img
+                  src={post.image_url}
+                  alt="food"
+                  className="w-full h-40 object-cover rounded mb-2"
+                />
+              )}
 
-          {/* ✅ If already requested */}
-          {!isOwner && alreadyRequested && (
-            <p className="text-green-600 mt-2">Already Requested</p>
-          )}
+              <h3 className="font-bold">{post.title}</h3>
+              <p className="text-gray-600">{post.pickup_location}</p>
 
-          {/* ✅ If owner */}
-          {isOwner && (
-            <p className="text-purple-600 mt-2">Your Post</p>
-          )}
+              {/* Buttons */}
+              {!isOwner && !alreadyRequested && (
+                <button
+                  onClick={() => requestPickup(post.id)}
+                  className="mt-2 bg-blue-500 text-white px-3 py-1 rounded"
+                >
+                  Request Pickup
+                </button>
+              )}
 
-          {/* 🔥 Show Requests */}
-          {post.requests && post.requests.length > 0 && (
-            <div className="mt-3 border-t pt-2">
-              <p className="text-sm font-semibold">Requests:</p>
+              {!isOwner && alreadyRequested && (
+                <p className="text-green-600 mt-2">Already Requested</p>
+              )}
 
-              {post.requests.map((req: any) => (
-              <div
-                key={req.id}
-                className="text-sm text-gray-600 flex justify-between items-center"
-              >
-                <span>Volunteer: {req.volunteer_id.slice(0, 6)}...</span>
+              {isOwner && (
+                <p className="text-purple-600 mt-2">Your Post</p>
+              )}
 
-                {/* ✅ If owner → show actions */}
-                {isOwner ? (
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => updateRequest(req.id, "accepted")}
-                      className="bg-green-500 text-white px-2 py-1 rounded text-xs"
+              {/* Requests */}
+              {post.requests && post.requests.length > 0 && (
+                <div className="mt-3 border-t pt-2">
+                  <p className="text-sm font-semibold">Requests:</p>
+
+                  {post.requests.map((req: any) => (
+                    <div
+                      key={req.id}
+                      className="text-sm text-gray-600 flex justify-between items-center"
                     >
-                      Accept
-                    </button>
-                    <button
-                      onClick={() => updateRequest(req.id, "rejected")}
-                      className="bg-red-500 text-white px-2 py-1 rounded text-xs"
-                    >
-                      Reject
-                    </button>
-                  </div>
-                ) : (
-                  <span className="text-yellow-600">{req.status}</span>
-                )}
-              </div>
-            ))}
+                      <span>
+                        Volunteer: {req.volunteer_id.slice(0, 6)}...
+                      </span>
+
+                      {isOwner ? (
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => updateRequest(req.id, "accepted")}
+                            className="bg-green-500 text-white px-2 py-1 rounded text-xs"
+                          >
+                            Accept
+                          </button>
+                          <button
+                            onClick={() => updateRequest(req.id, "rejected")}
+                            className="bg-red-500 text-white px-2 py-1 rounded text-xs"
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      ) : (
+                        <span className="text-yellow-600">
+                          {req.status}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-          {post.image_url && (
-  <img
-    src={post.image_url}
-    alt="food"
-    className="w-full h-40 object-cover rounded mb-2"
-  />
-)}
-        </div>
-      )
-    })}
+          )
+        })}
+    </div>
 
     {/* Floating Button */}
-<button
-  onClick={() => setOpenModal(true)}
-  className="fixed bottom-6 right-6 bg-green-600 text-white w-24 h-12 rounded-full text-sm shadow-lg"
->
-  Add Food
-</button>
+    <button
+      onClick={() => setOpenModal(true)}
+      className="fixed bottom-6 right-6 bg-green-600 text-white w-24 h-12 rounded-full text-sm shadow-lg"
+    >
+      Add Food
+    </button>
 
-{/* Modal */}
-<AddPostModal
-  open={openModal}
-  onClose={() => setOpenModal(false)}
-  onSubmit={addPost}
-/>
-    </div>
-  )
+    {/* Modal */}
+    <AddPostModal
+      open={openModal}
+      onClose={() => setOpenModal(false)}
+      onSubmit={addPost}
+    />
+  </div>
+)
 }
