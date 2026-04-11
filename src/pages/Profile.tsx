@@ -15,16 +15,31 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
       <Navbar />
 
-      <div className="p-6 mt-16 max-w-md mx-auto">
-        <h1 className="text-2xl font-bold mb-4">Profile</h1>
-
+      <div className="flex justify-center items-center mt-12 px-4">
         {user && (
-          <div className="bg-white p-4 rounded shadow">
-            <p><strong>Name:</strong> {user.user_metadata?.full_name || "User"}</p>
-            <p><strong>Email:</strong> {user.email}</p>
+          <div className="w-full max-w-md border border-white/20  mt-10 p-6">
+
+            {/* Avatar */}
+            <div className="flex flex-col items-center">
+              <img
+                src={
+                  user.user_metadata?.avatar_url ||
+                  user.user_metadata?.picture
+                }
+                alt="Profile"
+                className="w-24 h-24 rounded-full border-4 border-white shadow-md"
+              />
+
+              <h2 className="mt-4 text-xl font-semibold text-gray-800">
+                {user.user_metadata?.full_name || "User"}
+              </h2>
+
+              <p className="text-sm text-gray-600">{user.email}</p>
+            </div>
+
           </div>
         )}
       </div>
