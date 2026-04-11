@@ -6,11 +6,6 @@ import Navbar from "../components/Navbar"
 export default function Home() {
   const navigate = useNavigate()
 
-  const handleLogout = async () => {
-  await supabase.auth.signOut()
-  navigate("/")
-}
-
   useEffect(() => {
     const setupUser = async () => {
       const { data, error } = await supabase.auth.getUser()
