@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import { supabase } from "../lib/supabase"
 import { useNavigate } from "react-router-dom"
+import Navbar from "../components/Navbar"
 
 export default function Home() {
   const navigate = useNavigate()
@@ -39,19 +40,14 @@ export default function Home() {
     setupUser()
   }, [])
 
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center text-center p-6">
+ return (
+  <div className="min-h-screen flex flex-col">
 
-        {/* 🔴 Top Bar */}
-    <div className="w-full flex justify-end p-4">
-      <button
-        onClick={handleLogout}
-        className="bg-red-500 text-white px-4 py-1 rounded"
-      >
-        Logout
-      </button>
-    </div>
+    {/* ✅ Navbar */}
+    <Navbar />
 
+    {/* Main Content */}
+    <div className="flex flex-col items-center justify-center text-center p-6 flex-1">
       <h1 className="text-3xl font-bold mb-4">
         Welcome to PlatePartners 🍱
       </h1>
@@ -67,5 +63,6 @@ export default function Home() {
         View Food Posts
       </button>
     </div>
-  )
+  </div>
+)
 }
