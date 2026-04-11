@@ -32,14 +32,40 @@ const handleGoogleLogin = async () => {
   })
 }
 
-  return (
-    <div className="min-h-screen flex items-center justify-center">
+ return (
+  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 to-green-50 px-4">
+
+    {/* Card */}
+    <div className="bg-white shadow-xl rounded-2xl p-8 max-w-md w-full text-center">
+
+      {/* Logo / Title */}
+      <h1 className="text-3xl font-bold text-green-600 mb-2">
+        PlatePartners 🍱
+      </h1>
+
+      {/* Tagline */}
+      <p className="text-gray-600 mb-6">
+        Share food. Reduce waste. Spread kindness.
+      </p>
+
+      {/* Illustration / Emoji */}
+      <div className="text-5xl mb-6">
+        🌱🍛🐶
+      </div>
+
+      {/* Google Button */}
       <button
         onClick={handleGoogleLogin}
-        className="bg-green-600 text-white mt-16 px-6 py-2 rounded"
+        className="w-full flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg transition font-medium"
       >
         Continue with Google
       </button>
+
+      {/* Footer Note */}
+      <p className="text-xs text-gray-400 mt-6">
+        By continuing, you join a community that shares and helps others
+      </p>
     </div>
-  )
+  </div>
+)
 }
