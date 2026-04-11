@@ -68,11 +68,41 @@ export default function About() {
             </p>
 
             {/* Message */}
-            <p className="text-gray-600 text-sm max-w-md">
+            <p className="text-gray-600 text-sm max-w-md mb-4">
             PlatePartners was created with a simple belief that small acts of sharing
             can create meaningful change. By connecting people who want to help with those
             who need it, we can build a more compassionate and supportive community.
             </p>
+
+            {/* 🔗 Social Links */}
+            <div className="flex gap-4 mt-2">
+            
+            {/* 🔗 Social Links */}
+            <div className="flex gap-3 mt-2">
+
+            {/* LinkedIn */}
+            <a
+                href="https://www.linkedin.com/in/yash-patil-6655b5215/recent-activity/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded text-sm hover:bg-gray-100 transition"
+            >
+                LinkedIn
+            </a>
+
+            {/* Instagram */}
+            <a
+                href="https://www.instagram.com/__yash_patil_2121__"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded text-sm hover:bg-gray-100 transition"
+            >
+                Instagram
+            </a>
+
+            </div>
+
+            </div>
         </div>
         </div>
       </div>
