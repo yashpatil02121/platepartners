@@ -10,15 +10,15 @@ export default function Contact() {
 
         <div className="bg-white p-4 rounded shadow">
           <p className="mb-2">
-            📧 Email: platepartners20@gmail.com
+            Email: platepartners20@gmail.com
           </p>
 
           <p className="mb-2">
-            📍 Location: Mumbai, India
+            Location: Mumbai, India
           </p>
 
           <p>
-            📞 Phone: +91 8828587896
+            Phone: +91 8828587896
           </p>
         </div>
       </div>

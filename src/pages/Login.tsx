@@ -38,9 +38,16 @@ const handleGoogleLogin = async () => {
     {/* Card */}
     <div className="bg-white shadow-xl rounded-2xl p-8 max-w-md w-full text-center">
 
+      {/* Logo */}
+      <img
+        src="/pp_icon.png"
+        alt="PlatePartners Logo"
+        className="w-16 h-16 mx-auto mb-4"
+      />
+
       {/* Logo / Title */}
       <h1 className="text-3xl font-bold text-green-600 mb-2">
-        PlatePartners 🍱
+        PlatePartners
       </h1>
 
       {/* Tagline */}
@@ -49,9 +56,9 @@ const handleGoogleLogin = async () => {
       </p>
 
       {/* Illustration / Emoji */}
-      <div className="text-5xl mb-6">
+      {/* <div className="text-5xl mb-6">
         🌱🍛🐶
-      </div>
+      </div> */}
 
       {/* Google Button */}
       <button
