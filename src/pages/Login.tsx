@@ -16,14 +16,21 @@ export default function Login() {
     }
   }
 
-  const handleGoogleLogin = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: "https://platepartners.vercel.app/",
-      },
-    })
-  }
+const handleGoogleLogin = async () => {
+  const env = import.meta.env.VITE_APP_ENV
+
+  const redirectUrl =
+    env === "prod"
+      ? "https://platepartners.vercel.app/home"
+      : "http://localhost:5173/home"
+
+  await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: redirectUrl,
+    },
+  })
+}
 
   return (
     <div className="min-h-screen flex items-center justify-center">
