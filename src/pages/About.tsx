@@ -5,7 +5,7 @@ export default function About() {
     <div className="min-h-screen">
       <Navbar />
 
-      <div className="p-6 max-w-2xl mx-auto">
+      <div className="p-6 mt-16 max-w-2xl mx-auto">
         <h1 className="text-2xl font-bold mb-4">About PlatePartners</h1>
 
         <p className="text-gray-700 mb-3">

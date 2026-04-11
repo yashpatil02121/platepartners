@@ -36,7 +36,7 @@ const handleGoogleLogin = async () => {
     <div className="min-h-screen flex items-center justify-center">
       <button
         onClick={handleGoogleLogin}
-        className="bg-green-600 text-white px-6 py-2 rounded"
+        className="bg-green-600 text-white mt-16 px-6 py-2 rounded"
       >
         Continue with Google
       </button>

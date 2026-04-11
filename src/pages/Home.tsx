@@ -42,7 +42,7 @@ export default function Home() {
     <Navbar />
 
     {/* Main Content */}
-    <div className="flex flex-col items-center justify-center text-center p-6 flex-1">
+    <div className="flex flex-col items-center justify-center text-center mt-16 p-6 flex-1">
       <h1 className="text-3xl font-bold mb-4">
         Welcome to PlatePartners 🍱
       </h1>

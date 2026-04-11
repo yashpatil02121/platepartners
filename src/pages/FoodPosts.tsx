@@ -142,7 +142,7 @@ return (
     <Navbar />
 
     {/* Page Content */}
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-6 mt-16 max-w-3xl mx-auto">
 
       {/* 🔍 Search Bar */}
       <input

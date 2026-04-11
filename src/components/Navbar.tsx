@@ -16,7 +16,7 @@ export default function Navbar() {
   const showBack = location.pathname !== "/home"
 
   return (
-  <div className="w-full bg-white shadow px-4 py-3 flex justify-between items-center">
+  <div className="fixed top-0 left-0 w-full bg-white shadow px-4 py-3 flex justify-between items-center z-50">
 
     {/* LEFT SECTION */}
     <div className="flex items-center gap-3">
