@@ -42,6 +42,39 @@ export default function About() {
             Anyone can contribute by sharing food or by delivering it to those who need it.
         </p>
         </div>
+        {/* 👤 Founder Section */}
+        <div className="mt-10">
+        <h2 className="text-xl font-semibold mb-4 text-center">
+            Meet the Founder
+        </h2>
+
+        <div className="bg-white p-6 rounded shadow flex flex-col items-center text-center">
+            
+            {/* Founder Image */}
+            <img
+            src="https://totvbqirycowhbpzutnn.supabase.co/storage/v1/object/public/food-images/Profile%20Black%20Blue.jpeg"
+            alt="Founder"
+            className="w-28 h-28 rounded-full object-cover mb-4 shadow"
+            />
+
+            {/* Name */}
+            <h3 className="text-lg font-semibold">
+            Yash Patil
+            </h3>
+
+            {/* Role */}
+            <p className="text-sm text-gray-500 mb-3">
+            Founder, PlatePartners
+            </p>
+
+            {/* Message */}
+            <p className="text-gray-600 text-sm max-w-md">
+            PlatePartners was created with a simple belief that small acts of sharing
+            can create meaningful change. By connecting people who want to help with those
+            who need it, we can build a more compassionate and supportive community.
+            </p>
+        </div>
+        </div>
       </div>
     </div>
   )
