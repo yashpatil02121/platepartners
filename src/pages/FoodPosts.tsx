@@ -40,23 +40,51 @@ const fetchPosts = async () => {
   setPosts(data || [])
 }
 
-const addPost = async (title: string, location: string) => {
+const addPost = async (
+  title: string,
+  location: string,
+  file: File | null
+) => {
   const { data } = await supabase.auth.getUser()
+  if (!data.user) return
 
-  if (!data.user) {
-    alert("Please login")
-    return
-  }
-
+  // Ensure profile
   await supabase.from("profiles").upsert({
     id: data.user.id,
     name: data.user.user_metadata?.full_name || "User",
   })
 
+  let imageUrl = ""
+
+  // 📸 Upload image if exists
+  if (file) {
+    const filePath = `public/${Date.now()}-${file.name}`
+
+    const { data: uploadData, error: uploadError } =
+      await supabase.storage
+        .from("food-images")
+        .upload(filePath, file)
+
+    if (uploadError) {
+      console.error(uploadError)
+      alert("Image upload failed")
+      return
+    }
+
+    // ✅ Get public URL
+    const { data: publicUrlData } = supabase.storage
+      .from("food-images")
+      .getPublicUrl(filePath)
+
+    imageUrl = publicUrlData.publicUrl
+  }
+
+  // ✅ Insert post
   const { error } = await supabase.from("food_posts").insert({
     user_id: data.user.id,
     title,
     pickup_location: location,
+    image_url: imageUrl,
   })
 
   if (error) {
@@ -196,6 +224,13 @@ const updateRequest = async (requestId: string, status: string) => {
             ))}
             </div>
           )}
+          {post.image_url && (
+  <img
+    src={post.image_url}
+    alt="food"
+    className="w-full h-40 object-cover rounded mb-2"
+  />
+)}
         </div>
       )
     })}
