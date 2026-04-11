@@ -173,6 +173,10 @@ return (
           return (
             <div key={post.id} className="bg-white p-4 mb-3 rounded shadow">
 
+              <h3 className="font-bold">{post.title}</h3>
+              
+              <p className="text-gray-600 mb-2 text-xs">{post.pickup_location}</p>
+
               {/* ✅ Image */}
               {post.image_url && (
                 <img
@@ -182,8 +186,6 @@ return (
                 />
               )}
 
-              <h3 className="font-bold">{post.title}</h3>
-              <p className="text-gray-600">{post.pickup_location}</p>
 
               {/* Buttons */}
               {!isOwner && !alreadyRequested && (
@@ -200,7 +202,7 @@ return (
               )}
 
               {isOwner && (
-                <p className="text-purple-600 mt-2">Your Post</p>
+                <p className="text-purple-600 mt-2 text-xs">Your Posted Help!</p>
               )}
 
               {/* Requests */}
