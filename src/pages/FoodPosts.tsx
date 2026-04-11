@@ -4,8 +4,6 @@ import AddPostModal from "../components/AddPostModal"
 
 export default function FoodPosts() {
   const [posts, setPosts] = useState<any[]>([])
-  const [title, setTitle] = useState("")
-  const [location, setLocation] = useState("")
   const [userId, setUserId] = useState<string | null>(null)
   const [openModal, setOpenModal] = useState(false)
 
