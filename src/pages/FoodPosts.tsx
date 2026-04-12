@@ -209,7 +209,7 @@ return (
         <img
           src={post.image_url}
           alt="food"
-          className="w-full h-40 object-cover rounded mb-3"
+          className="w-full max-h-64 object-contain rounded mb-3"
         />
       )}
 
