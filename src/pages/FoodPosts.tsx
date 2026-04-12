@@ -161,6 +161,7 @@ return (
       />
 
       {/* Posts */}
+      {/* Posts */}
       {posts
         .filter((post) => {
           const term = searchTerm.toLowerCase()
@@ -173,130 +174,160 @@ return (
         .map((post) => {
           const isOwner = post.user_id === userId
 
+          const approvedRequest = post.requests?.find(
+            (r: any) =>
+              r.volunteer_id === userId && r.status === "approved"
+          )
+
           const alreadyRequested = post.requests?.some(
             (r: any) => r.volunteer_id === userId
           )
 
           return (
-            <div key={post.id} className="bg-white/40 backdrop-blur-md rounded-xl mb-3 border border-white/20 shadow">
-
-  {/* HEADER (Always visible) */}
-  <div
-    onClick={() =>
-      setOpenPostId(openPostId === post.id ? null : post.id)
-    }
-    className="flex justify-between items-center p-4 cursor-pointer"
-  >
-    <div>
-      <h3 className="font-semibold text-gray-800">{post.title}</h3>
-      <p className="text-xs text-gray-500">{post.pickup_location}</p>
-    </div>
-
-    {/* ICON */}
-    <ChevronDown
-  className={`transition-transform ${
-    openPostId === post.id ? "rotate-180" : ""
-  }`}
-/>
-  </div>
-
-  {/* COLLAPSIBLE CONTENT */}
-  {openPostId === post.id && (
-    <div className="px-4 pb-4">
-
-      {/* Image */}
-      {post.image_url && (
-        <img
-          src={post.image_url}
-          alt="food"
-          className="w-full max-h-64 object-contain rounded mb-3"
-        />
-      )}
-
-      {/* 📞 Phone */}
-      {post.phone && (
-        <a
-          href={`tel:${post.phone}`}
-          className="text-sm text-blue-600 mb-2 block"
-        >
-        Call: {post.phone}
-        </a>
-      )}
-
-      {/* Buttons */}
-      {!isOwner && !alreadyRequested && (
-        <button
-          onClick={() => requestPickup(post.id)}
-          className="bg-blue-500 text-white px-3 py-1 rounded"
-        >
-          Request Pickup
-        </button>
-      )}
-
-      {!isOwner && alreadyRequested && (
-        <p className="text-green-600 mt-2">Already Requested</p>
-      )}
-
-      {isOwner && (
-        <p className="text-purple-600 mt-2 text-xs">
-          Your Posted Help!
-        </p>
-      )}
-
-      {/* Requests */}
-      {post.requests && post.requests.length > 0 && (
-        <div className="mt-3 border-t pt-2">
-          <p className="text-sm font-semibold">Requests:</p>
-
-          {post.requests.map((req: any) => (
             <div
-              key={req.id}
-              className="text-sm text-gray-600 flex justify-between items-center"
+              key={post.id}
+              className="bg-white/40 backdrop-blur-md rounded-xl mb-3 border border-white/20 shadow"
             >
-              <span>
-                Volunteer: {req.volunteer_id.slice(0, 6)}...
-              </span>
+              {/* HEADER */}
+              <div
+                onClick={() =>
+                  setOpenPostId(
+                    openPostId === post.id ? null : post.id
+                  )
+                }
+                className="flex justify-between items-center p-4 cursor-pointer"
+              >
+                <div>
+                  <h3 className="font-semibold text-gray-800">
+                    {post.title}
+                  </h3>
+                  <p className="text-xs text-gray-500">
+                    {post.pickup_location}
+                  </p>
+                </div>
 
-              {isOwner ? (
-  req.status === "pending" ? (
-    <div className="flex gap-2">
-      <button
-        onClick={() => updateRequest(req.id, "approved")}
-        className="bg-green-500 text-white px-2 py-1 rounded text-xs"
-      >
-        Accept
-      </button>
+                <ChevronDown
+                  className={`transition-transform ${
+                    openPostId === post.id ? "rotate-180" : ""
+                  }`}
+                />
+              </div>
 
-      <button
-        onClick={() => updateRequest(req.id, "rejected")}
-        className="bg-red-500 text-white px-2 py-1 rounded text-xs"
-      >
-        Reject
-      </button>
-    </div>
-  ) : (
-    <span
-      className={`text-xs font-medium ${
-        req.status === "approved"
-          ? "text-green-600"
-          : "text-red-600"
-      }`}
-    >
-      {req.status}
-    </span>
-  )
-                ) : (
-                  <span className="text-yellow-600">
-                    {req.status}
-                  </span>
-                )}
+              {/* CONTENT */}
+              {openPostId === post.id && (
+                <div className="px-4 pb-4">
+
+                  {/* Image */}
+                  {post.image_url && (
+                    <img
+                      src={post.image_url}
+                      alt="food"
+                      className="w-full max-h-64 object-contain rounded mb-3 bg-gray-100"
+                    />
+                  )}
+
+                  {/* 📞 Phone (ONLY IF APPROVED) */}
+                  {approvedRequest && post.phone && (
+                    <a
+                      href={`tel:${post.phone}`}
+                      className="text-sm text-blue-600 mb-2 block"
+                    >
+                      📞 Call: {post.phone}
+                    </a>
+                  )}
+
+                  {/* Request Button */}
+                  {!isOwner && !alreadyRequested && (
+                    <button
+                      onClick={() => requestPickup(post.id)}
+                      className="bg-blue-500 text-white px-3 py-1 rounded"
+                    >
+                      Request Pickup
+                    </button>
+                  )}
+
+                  {/* Pending */}
+                  {!isOwner && alreadyRequested && !approvedRequest && (
+                    <p className="text-yellow-600 mt-2">
+                      Request Sent (Waiting for approval)
+                    </p>
+                  )}
+
+                  {/* Approved */}
+                  {!isOwner && approvedRequest && (
+                    <p className="text-green-600 mt-2">
+                      Request Approved
+                    </p>
+                  )}
+
+                  {/* Owner */}
+                  {isOwner && (
+                    <p className="text-purple-600 mt-2 text-xs">
+                      Your Posted Help!
+                    </p>
+                  )}
+
+                  {/* Requests List (Owner View) */}
+                  {post.requests && post.requests.length > 0 && (
+                    <div className="mt-3 border-t pt-2">
+                      <p className="text-sm font-semibold">
+                        Requests:
+                      </p>
+
+                      {post.requests.map((req: any) => (
+                        <div
+                          key={req.id}
+                          className="text-sm text-gray-600 flex justify-between items-center"
+                        >
+                          {/* <span>
+                            Volunteer:{" "}
+                            {req.volunteer_id.slice(0, 6)}...
+                          </span> */}
+
+                          {isOwner ? (
+                            req.status === "pending" ? (
+                              <div className="flex gap-2">
+                                <button
+                                  onClick={() =>
+                                    updateRequest(req.id, "approved")
+                                  }
+                                  className="bg-green-500 text-white px-2 py-1 rounded text-xs"
+                                >
+                                  Accept
+                                </button>
+
+                                <button
+                                  onClick={() =>
+                                    updateRequest(req.id, "rejected")
+                                  }
+                                  className="bg-red-500 text-white px-2 py-1 rounded text-xs"
+                                >
+                                  Reject
+                                </button>
+                              </div>
+                            ) : (
+                              <span
+                                className={`text-xs font-medium ${
+                                  req.status === "approved"
+                                    ? "text-green-600"
+                                    : "text-red-600"
+                                }`}
+                              >
+                                {req.status}
+                              </span>
+                            )
+                          ) : (
+                            <span className="text-yellow-600">
+                              {req.status}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-          ))}
-        </div>
-      )}
-    </div>
-  )}
-</div>
           )
         })}
     </div>
