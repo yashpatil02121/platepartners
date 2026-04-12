@@ -213,6 +213,16 @@ return (
         />
       )}
 
+      {/* 📞 Phone */}
+      {post.phone && (
+        <a
+          href={`tel:${post.phone}`}
+          className="text-sm text-blue-600 mb-2 block"
+        >
+        Call: {post.phone}
+        </a>
+      )}
+
       {/* Buttons */}
       {!isOwner && !alreadyRequested && (
         <button
