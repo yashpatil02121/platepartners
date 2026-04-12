@@ -3,9 +3,12 @@ import { useState } from "react"
 export default function AddPostModal({ open, onClose, onSubmit }: any) {
   const [title, setTitle] = useState("")
   const [location, setLocation] = useState("")
+  const [phone, setPhone] = useState("") // ✅ new state
   const [file, setFile] = useState<File | null>(null)
 
   if (!open) return null
+
+  const isValidPhone = (phone: string) => /^[0-9]{10}$/.test(phone)
 
   return (
     <div className="fixed inset-0 bg-black/30 backdrop-blur-sm boborder-white/20 flex items-center justify-center z-50">
@@ -26,12 +29,21 @@ export default function AddPostModal({ open, onClose, onSubmit }: any) {
           onChange={(e) => setLocation(e.target.value)}
         />
 
+        {/* 📞 Phone Input */}
+        <input
+          className="border p-2 w-full mb-2"
+          placeholder="Phone (10 digits)"
+          value={phone}
+          maxLength={10}
+          onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))} // only numbers
+        />
+
         {file && (
-  <img
-    src={URL.createObjectURL(file)}
-    className="w-full h-32 object-cover mb-2"
-  />
-)}
+          <img
+            src={URL.createObjectURL(file)}
+            className="w-full h-32 object-cover mb-2"
+          />
+        )}
 
         {/* 📸 Image Upload */}
         <input
@@ -48,9 +60,16 @@ export default function AddPostModal({ open, onClose, onSubmit }: any) {
 
           <button
             onClick={() => {
-              onSubmit(title, location, file)
+              if (!isValidPhone(phone)) {
+                alert("Please enter a valid 10-digit phone number")
+                return
+              }
+
+              onSubmit(title, location, phone, file) // ✅ pass phone
+
               setTitle("")
               setLocation("")
+              setPhone("")
               setFile(null)
               onClose()
             }}

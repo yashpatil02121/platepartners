@@ -46,6 +46,7 @@ const fetchPosts = async () => {
 const addPost = async (
   title: string,
   location: string,
+  phone: string,
   file: File | null
 ) => {
   const { data } = await supabase.auth.getUser()
@@ -87,6 +88,7 @@ const addPost = async (
     user_id: data.user.id,
     title,
     pickup_location: location,
+    phone,
     image_url: imageUrl,
   })
 
