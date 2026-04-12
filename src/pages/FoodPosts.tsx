@@ -161,9 +161,9 @@ return (
       />
 
       {/* Posts */}
-      {/* Posts */}
-      {posts
-        .filter((post) => {
+<div className="grid grid-cols-2 gap-4">
+  {posts
+    .filter((post) => {
           const term = searchTerm.toLowerCase()
 
           return (
@@ -330,6 +330,7 @@ return (
             </div>
           )
         })}
+</div>
     </div>
 
     {/* Floating Button */}
