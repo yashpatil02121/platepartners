@@ -30,7 +30,10 @@ const fetchPosts = async () => {
         id,
         volunteer_id,
         status,
-        created_at
+        created_at,
+        profiles (
+          name
+        )
       )
     `)
     .order("created_at", { ascending: false })
@@ -283,6 +286,10 @@ return (
                             Volunteer:{" "}
                             {req.volunteer_id.slice(0, 6)}...
                           </span> */}
+
+                          <span className="font-medium">
+                            Requested by {req.profiles?.name || "User"}
+                          </span>
 
                           {isOwner ? (
                             req.status === "pending" ? (
