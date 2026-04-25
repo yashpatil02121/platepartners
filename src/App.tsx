@@ -6,6 +6,7 @@ import Profile from "./pages/Profile"
 import About from "./pages/About"
 import Contact from "./pages/Contact"
 import ProtectedRoute from "./components/ProtectedRoute"
+import Needy from "./pages/Needy"
 
 function App() {
   return (
@@ -54,6 +55,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Contact />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/required-helps"
+          element={
+            <ProtectedRoute>
+              <Needy />
             </ProtectedRoute>
           }
         />
