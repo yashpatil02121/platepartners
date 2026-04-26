@@ -3,6 +3,7 @@ import { supabase } from "../lib/supabase"
 import AddPostModal from "../components/AddPostModal"
 import Navbar from "../components/Navbar"
 import { ChevronDown } from "lucide-react"
+import DeleteDialog from "../components/DeleteDialog"
 
 export default function FoodPosts() {
   const [posts, setPosts] = useState<any[]>([])
@@ -10,6 +11,7 @@ export default function FoodPosts() {
   const [openModal, setOpenModal] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [openPostId, setOpenPostId] = useState<string | null>(null)
+  const [deletePostId, setDeletePostId] = useState<string | null>(null)
 
   useEffect(() => {
     fetchPosts()
@@ -132,6 +134,24 @@ const requestPickup = async (postId: string) => {
     volunteer_id: data.user.id,
   })
 
+  fetchPosts()
+}
+
+const deletePost = async () => {
+  if (!deletePostId) return
+
+  const { error } = await supabase
+    .from("food_posts")
+    .delete()
+    .eq("id", deletePostId)
+
+  if (error) {
+    console.error(error)
+    alert("Failed to delete")
+    return
+  }
+
+  setDeletePostId(null) // close dialog
   fetchPosts()
 }
 
@@ -373,12 +393,29 @@ return (
                       ))}
                     </div>
                   )}
+                    {isOwner && (
+                      <div className="flex justify-end">
+                    <button
+                      onClick={() => setDeletePostId(post.id)}
+                      className="mt-2 text-red-500 text-xs"
+                    >
+                      Delete
+                    </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
           )
         })}
 </div>
+      <DeleteDialog
+        open={!!deletePostId}
+        onClose={() => setDeletePostId(null)}
+        onConfirm={deletePost}
+        title="Delete Food Post"
+        description="This action cannot be undone."
+      />
     </div>
 
     {/* Floating Button */}
@@ -396,5 +433,7 @@ return (
       onSubmit={addPost}
     />
   </div>
+  
 )
 }
+
