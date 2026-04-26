@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 export default function AddNeedyModal({ open, onClose, onSubmit }: any) {
   const [title, setTitle] = useState("")
@@ -6,6 +6,22 @@ export default function AddNeedyModal({ open, onClose, onSubmit }: any) {
   const [phone, setPhone] = useState("")
   const [type, setType] = useState("people")
   const [file, setFile] = useState<File | null>(null)
+
+  // ✅ Reset function
+  const resetForm = () => {
+    setTitle("")
+    setLocation("")
+    setPhone("")
+    setType("people")
+    setFile(null)
+  }
+
+  // ✅ Auto reset when modal closes
+  useEffect(() => {
+    if (!open) {
+      resetForm()
+    }
+  }, [open])
 
   if (!open) return null
 
@@ -53,19 +69,30 @@ export default function AddNeedyModal({ open, onClose, onSubmit }: any) {
         />
 
         <div className="flex justify-end gap-2">
-          <button onClick={onClose} className="border px-3 py-1 rounded">
+          
+          {/* ❌ Cancel now resets */}
+          <button
+            onClick={() => {
+              resetForm()
+              onClose()
+            }}
+            className="border px-3 py-1 rounded"
+          >
             Cancel
           </button>
 
+          {/* ✅ Submit resets */}
           <button
             onClick={() => {
               onSubmit({ title, location, phone, type, file })
+              resetForm()
               onClose()
             }}
             className="bg-green-600 text-white px-3 py-1 rounded"
           >
             Add
           </button>
+
         </div>
       </div>
     </div>
