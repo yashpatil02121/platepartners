@@ -4,6 +4,7 @@ import AddPostModal from "../components/AddPostModal"
 import Navbar from "../components/Navbar"
 import { ChevronDown } from "lucide-react"
 import DeleteDialog from "../components/DeleteDialog"
+import EditPostModal from "../components/EditPostModal"
 
 export default function FoodPosts() {
   const [posts, setPosts] = useState<any[]>([])
@@ -12,6 +13,7 @@ export default function FoodPosts() {
   const [searchTerm, setSearchTerm] = useState("")
   const [openPostId, setOpenPostId] = useState<string | null>(null)
   const [deletePostId, setDeletePostId] = useState<string | null>(null)
+  const [editPost, setEditPost] = useState<any>(null)
 
   useEffect(() => {
     fetchPosts()
@@ -152,6 +154,27 @@ const deletePost = async () => {
   }
 
   setDeletePostId(null) // close dialog
+  fetchPosts()
+}
+
+const updatePost = async (updatedData: any) => {
+  if (!editPost) return
+
+  const { error } = await supabase
+    .from("food_posts")
+    .update({
+      title: updatedData.title,
+      pickup_location: updatedData.location,
+      phone: updatedData.phone,
+    })
+    .eq("id", editPost.id)
+
+  if (error) {
+    console.error(error)
+    alert("Update failed")
+    return
+  }
+
   fetchPosts()
 }
 
@@ -394,7 +417,13 @@ return (
                     </div>
                   )}
                     {isOwner && (
-                      <div className="flex justify-end">
+                      <div className="flex justify-end gap-4">
+                      <button
+                          onClick={() => setEditPost(post)}
+                          className="mt-2 text-blue-500 text-xs"
+                        >
+                          Edit
+                    </button>
                     <button
                       onClick={() => setDeletePostId(post.id)}
                       className="mt-2 text-red-500 text-xs"
@@ -416,6 +445,12 @@ return (
         title="Delete Food Post"
         description="This action cannot be undone."
       />
+      <EditPostModal
+  open={!!editPost}
+  onClose={() => setEditPost(null)}
+  onSubmit={updatePost}
+  initialData={editPost}
+/>
     </div>
 
     {/* Floating Button */}
