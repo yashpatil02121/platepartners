@@ -48,13 +48,21 @@ return (
       <p className="text-gray-700 max-w-xl mb-6">
         Connecting people who want to help with those who need it.
       </p>
+      <div className="flex gap-4">
+        <button
+          onClick={() => navigate("/posts")}
+          className="bg-green-600 hover:bg-green-700 transition text-white px-6 py-3 rounded-lg shadow"
+        >
+          Available Food
+        </button>
 
-      <button
-        onClick={() => navigate("/posts")}
-        className="bg-green-600 hover:bg-green-700 transition text-white px-6 py-3 rounded-lg shadow"
-      >
-        Explore Food Posts
-      </button>
+        <button
+          onClick={() => navigate("/required-helps")}
+          className="bg-white border border-green-600 text-green-600 hover:bg-green-50 transition px-6 py-3 rounded-lg shadow"
+        >
+          Places That Need Help
+        </button>
+      </div>
     </div>
 
 <div className="mt-16 px-6 max-w-3xl mx-auto text-center">
@@ -109,13 +117,22 @@ return (
 </div>
 
     {/* 🚀 FINAL CTA */}
-    <div className="mt-12 mb-10 text-center">
+    <div className="mt-12 mb-10 text-center flex flex-col sm:flex-row gap-4 justify-center">
+
       <button
         onClick={() => navigate("/posts")}
         className="bg-green-600 hover:bg-green-700 transition text-white px-6 py-3 rounded-lg shadow"
       >
-        Start Helping
+        Share Food
       </button>
+
+      <button
+        onClick={() => navigate("/required-helps")}
+        className="bg-white border border-green-600 text-green-600 hover:bg-green-50 transition px-6 py-3 rounded-lg shadow"
+      >
+        Deliver Help
+      </button>
+
     </div>
 
   </div>
