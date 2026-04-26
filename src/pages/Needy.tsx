@@ -20,11 +20,23 @@ export default function Needy() {
     fetchFoods()
   }, [])
 
-  // 🟢 Fetch Needy
+  // 🟢 Fetch Needy + Deliveries
   const fetchNeedy = async () => {
     const { data, error } = await supabase
       .from("needy_requests")
-      .select("*")
+      .select(`
+        *,
+        deliveries (
+          id,
+          status,
+          food_post_id,
+          food_posts (
+            id,
+            title,
+            pickup_location
+          )
+        )
+      `)
       .order("created_at", { ascending: false })
 
     if (error) {
@@ -89,7 +101,7 @@ export default function Needy() {
     fetchNeedy()
   }
 
-  // 🟢 Add Food (from modal)
+  // 🟢 Add Food
   const addFood = async (title: string, location: string, file: File | null) => {
     const { data } = await supabase.auth.getUser()
     if (!data.user) return
@@ -144,14 +156,25 @@ export default function Needy() {
 
     alert("Delivery linked successfully!")
     setOpenDeliveryModal(false)
+    fetchNeedy()
   }
 
+  // 🟢 Collect ALL linked food IDs (GLOBAL)
+  const allLinkedFoodIds = data.flatMap((n) =>
+    n.deliveries?.map((d: any) => d.food_post_id) || []
+  )
+
+  // 🟢 Filter foods (no reuse)
   const filteredFoods = foods.filter((food) => {
     const term = foodSearch.toLowerCase()
-    return (
+
+    const matchesSearch =
       food.title?.toLowerCase().includes(term) ||
       food.pickup_location?.toLowerCase().includes(term)
-    )
+
+    const alreadyLinkedAnywhere = allLinkedFoodIds.includes(food.id)
+
+    return matchesSearch && !alreadyLinkedAnywhere
   })
 
   return (
@@ -174,7 +197,6 @@ export default function Needy() {
             )}
 
             <h3 className="font-semibold">{item.title}</h3>
-
             <p className="text-gray-600 text-sm">{item.location}</p>
 
             <p className="text-xs text-gray-500 mt-1">
@@ -185,15 +207,37 @@ export default function Needy() {
               <p className="text-sm mt-2">📞 {item.phone}</p>
             )}
 
-            <button
-              onClick={() => {
-                setSelectedNeedyId(item.id)
-                setOpenDeliveryModal(true)
-              }}
-              className="mt-3 bg-green-600 text-white px-3 py-1 rounded"
-            >
-              Available Food
-            </button>
+            {/* 🔗 Linked Food */}
+            {item.deliveries && item.deliveries.length > 0 && (
+              <div className="mt-3 border-t pt-2">
+                <p className="text-sm font-semibold mb-1">Linked Food:</p>
+
+                {item.deliveries.map((d: any) => (
+                  <div
+                    key={d.id}
+                    className="text-sm text-gray-600 flex justify-between"
+                  >
+                    <span>{d.food_posts?.title}</span>
+                    <span className="text-xs text-gray-500">
+                      {d.food_posts?.pickup_location}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* ✅ Show button ONLY if no delivery exists */}
+            {(!item.deliveries || item.deliveries.length === 0) && (
+              <button
+                onClick={() => {
+                  setSelectedNeedyId(item.id)
+                  setOpenDeliveryModal(true)
+                }}
+                className="mt-3 bg-green-600 text-white px-3 py-1 rounded"
+              >
+                Available Foods
+              </button>
+            )}
           </div>
         ))}
       </div>
@@ -221,7 +265,6 @@ export default function Needy() {
               Select Food to Deliver
             </h2>
 
-            {/* 🔍 Search */}
             <input
               type="text"
               placeholder="Search food or location..."
@@ -230,10 +273,9 @@ export default function Needy() {
               className="w-full mb-3 p-2 border rounded"
             />
 
-            {/* Food List */}
             {filteredFoods.length === 0 && (
               <p className="text-sm text-gray-500 mb-2">
-                No matching food found
+                No available food (already used or none added)
               </p>
             )}
 
@@ -250,7 +292,6 @@ export default function Needy() {
               </div>
             ))}
 
-            {/* ➕ Add Food */}
             <button
               onClick={() => {
                 setOpenDeliveryModal(false)
@@ -261,7 +302,6 @@ export default function Needy() {
               + Add New Food Post
             </button>
 
-            {/* Cancel */}
             <button
               onClick={() => setOpenDeliveryModal(false)}
               className="mt-2 border px-3 py-1 rounded w-full"
