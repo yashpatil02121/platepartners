@@ -7,6 +7,7 @@ import About from "./pages/About"
 import Contact from "./pages/Contact"
 import ProtectedRoute from "./components/ProtectedRoute"
 import Needy from "./pages/Needy"
+import Landing from "./pages/Landing"
 
 function App() {
   return (
@@ -65,6 +66,12 @@ function App() {
             <ProtectedRoute>
               <Needy />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/landing-page"
+          element={
+              <Landing />
           }
         />
       </Routes>
