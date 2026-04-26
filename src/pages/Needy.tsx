@@ -22,9 +22,36 @@ export default function Needy() {
   }, [])
 
   // 🟢 Fetch Needy + Deliveries
-  const fetchNeedy = async () => {
+const fetchNeedy = async () => {
+  const { data, error } = await supabase
+    .from("needy_requests")
+    .select(`
+      *,
+      deliveries (
+        id,
+        status,
+        food_post_id,
+        food_posts (
+          id,
+          title,
+          pickup_location
+        )
+      )
+    `)
+    .order("created_at", { ascending: false })
+
+  if (error) {
+    console.error(error)
+    return
+  }
+
+  setData(data || [])
+}
+  // 🟢 Fetch Foods
+  const fetchFoods = async () => {
     const { data, error } = await supabase
-      .from("needy_requests")
+      .from("food_posts")
+      // .select("*")
       .select(`
         *,
         deliveries (
@@ -38,21 +65,6 @@ export default function Needy() {
           )
         )
       `)
-      .order("created_at", { ascending: false })
-
-    if (error) {
-      console.error(error)
-      return
-    }
-
-    setData(data || [])
-  }
-
-  // 🟢 Fetch Foods
-  const fetchFoods = async () => {
-    const { data, error } = await supabase
-      .from("food_posts")
-      .select("*")
       .eq("status", "available")
       .order("created_at", { ascending: false })
 
@@ -235,6 +247,26 @@ export default function Needy() {
           <p className="text-sm mt-2">📞 {item.phone}</p>
         )}
 
+        {/* 🔗 Deliveries */}
+        {item.deliveries && item.deliveries.length > 0 && (
+          <div className="mt-3 border-t pt-2">
+            <p className="text-sm font-semibold text-green-700">
+              Nearby Food to be Delivered:
+            </p>
+
+            {item.deliveries.map((d: any) => (
+              <div
+                key={d.id}
+                className="text-sm text-gray-600 flex justify-between"
+              >
+                <span>{d.food_posts?.title}</span>
+                <span className="text-xs text-gray-500">
+                  {d.food_posts?.pickup_location}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
         {/* Button */}
         <button
           onClick={() => {
