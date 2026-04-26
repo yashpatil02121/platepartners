@@ -34,6 +34,15 @@ const fetchPosts = async () => {
         profiles (
           name
         )
+      ),
+      deliveries (
+        id,
+        status,
+        needy_requests (
+          id,
+          title,
+          location
+        )
       )
     `)
     .order("created_at", { ascending: false })
@@ -45,7 +54,6 @@ const fetchPosts = async () => {
 
   setPosts(data || [])
 }
-
 const addPost = async (
   title: string,
   location: string,
@@ -176,6 +184,7 @@ return (
         })
         .map((post) => {
           const isOwner = post.user_id === userId
+          const isLinked = post.deliveries && post.deliveries.length > 0
 
           const approvedRequest = post.requests?.find(
             (r: any) =>
@@ -229,6 +238,28 @@ return (
                     />
                   )}
 
+                  {/* 🔗 Delivered Info */}
+                  {isLinked && (
+                    <div className="mt-3 border-t pt-2">
+                      <p className="text-sm font-semibold text-green-700">
+                        Will be Delivered To:
+                      </p>
+
+                      {post.deliveries.map((d: any) => (
+                        <div key={d.id} className="text-sm text-gray-600">
+                          <p>{d.needy_requests?.title}</p>
+                          <p className="text-xs text-gray-500">
+                            {d.needy_requests?.location}
+                          </p>
+                        </div>
+                      ))}
+
+                      <p className="text-xs text-green-600 mt-1">
+                        This food is already assigned for delivery
+                      </p>
+                    </div>
+                  )}
+
                   {/* 📞 Phone (ONLY IF APPROVED) */}
                   {approvedRequest && post.phone && (
                     <a
@@ -240,7 +271,8 @@ return (
                   )}
 
                   {/* Request Button */}
-                  {!isOwner && !alreadyRequested && (
+                  {/* {!isOwner && !alreadyRequested && ( */}
+                  {!isOwner && !alreadyRequested && !isLinked && (
                     <button
                       onClick={() => requestPickup(post.id)}
                       className="bg-blue-500 text-white px-3 py-1 rounded"
@@ -250,14 +282,16 @@ return (
                   )}
 
                   {/* Pending */}
-                  {!isOwner && alreadyRequested && !approvedRequest && (
+                  {/* {!isOwner && alreadyRequested && !approvedRequest && ( */}
+                  {!isOwner && alreadyRequested && !approvedRequest && !isLinked && (
                     <p className="text-yellow-600 mt-2">
                       Request Sent (Waiting for approval)
                     </p>
                   )}
 
                   {/* Approved */}
-                  {!isOwner && approvedRequest && (
+                  {/* {!isOwner && approvedRequest && ( */}
+                  {!isOwner && approvedRequest && !isLinked && (
                     <p className="text-green-600 mt-2">
                       Request Approved
                     </p>
