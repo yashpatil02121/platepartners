@@ -174,15 +174,20 @@ return (
       {/* Posts */}
 <div className="grid grid-cols-2 gap-4">
   {posts
-    .filter((post) => {
-          const term = searchTerm.toLowerCase()
+  .filter((post) => {
+    const term = searchTerm.toLowerCase()
 
-          return (
-            post.title?.toLowerCase().includes(term) ||
-            post.pickup_location?.toLowerCase().includes(term)
-          )
-        })
-        .map((post) => {
+    return (
+      post.title?.toLowerCase().includes(term) ||
+      post.pickup_location?.toLowerCase().includes(term)
+    )
+  })
+  .sort((a, b) => {
+    if (a.user_id === userId && b.user_id !== userId) return -1
+    if (a.user_id !== userId && b.user_id === userId) return 1
+    return 0
+  })
+  .map((post) => {
           const isOwner = post.user_id === userId
           const isLinked = post.deliveries && post.deliveries.length > 0
 
@@ -198,7 +203,9 @@ return (
           return (
             <div
               key={post.id}
-              className="bg-white/40 backdrop-blur-md rounded-xl mb-3 border border-white/20 shadow"
+              className={`bg-white/40 backdrop-blur-md rounded-xl mb-3 border shadow ${
+              isOwner ? "border-purple-500" : "border-white/20"
+            }`}
             >
               {/* HEADER */}
               <div
@@ -298,11 +305,11 @@ return (
                   )}
 
                   {/* Owner */}
-                  {isOwner && (
+                  {/* {isOwner && (
                     <p className="text-purple-600 mt-2 text-xs">
                       Your Posted Help!
                     </p>
-                  )}
+                  )} */}
 
                   {/* Requests List (Owner View) */}
                   {post.requests && post.requests.length > 0 && (
