@@ -14,6 +14,7 @@ export default function Needy() {
 
   const [selectedNeedyId, setSelectedNeedyId] = useState<string | null>(null)
   const [foodSearch, setFoodSearch] = useState("")
+  const [searchTerm, setSearchTerm] = useState("")
 
   useEffect(() => {
     fetchNeedy()
@@ -185,9 +186,26 @@ export default function Needy() {
         <h1 className="text-xl font-semibold mb-4">
           Places Where Help is Needed
         </h1>
+        <input
+  type="text"
+  placeholder="Search by place, type, or title..."
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(e.target.value)}
+  className="w-full mb-4 p-2 border rounded"
+/>
 
 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-  {data.map((item) => (
+  {data
+  .filter((item) => {
+    const term = searchTerm.toLowerCase()
+
+    return (
+      item.title?.toLowerCase().includes(term) ||
+      item.location?.toLowerCase().includes(term) ||
+      item.type?.toLowerCase().includes(term)
+    )
+  })
+  .map((item) => (
     <div
       key={item.id}
       className="bg-white/40 backdrop-blur-md rounded-xl border border-white/20 shadow"
