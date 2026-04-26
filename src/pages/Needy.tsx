@@ -186,60 +186,51 @@ export default function Needy() {
           Places Where Help is Needed
         </h1>
 
-        {data.map((item) => (
-          <div key={item.id} className="bg-white p-4 mb-3 rounded shadow">
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  {data.map((item) => (
+    <div
+      key={item.id}
+      className="bg-white/40 backdrop-blur-md rounded-xl border border-white/20 shadow"
+    >
+      {/* Image */}
+      {item.image_url && (
+        <img
+          src={item.image_url}
+          className="w-full h-40 object-cover rounded-t-xl"
+        />
+      )}
 
-            {item.image_url && (
-              <img
-                src={item.image_url}
-                className="w-full h-40 object-cover rounded mb-2"
-              />
-            )}
+      <div className="p-4">
+        {/* Title */}
+        <h3 className="font-semibold">{item.title}</h3>
 
-            <h3 className="font-semibold">{item.title}</h3>
-            <p className="text-gray-600 text-sm">{item.location}</p>
+        {/* Location */}
+        <p className="text-gray-600 text-sm">{item.location}</p>
 
-            <p className="text-xs text-gray-500 mt-1">
-              {item.type === "animals" ? "🐶 Animals" : "👤 People"}
-            </p>
+        {/* Type */}
+        <p className="text-xs text-gray-500 mt-1">
+          {item.type === "animals" ? "🐶 Animals" : "👤 People"}
+        </p>
 
-            {item.phone && (
-              <p className="text-sm mt-2">📞 {item.phone}</p>
-            )}
+        {/* Phone */}
+        {item.phone && (
+          <p className="text-sm mt-2">📞 {item.phone}</p>
+        )}
 
-            {/* 🔗 Linked Food */}
-            {item.deliveries && item.deliveries.length > 0 && (
-              <div className="mt-3 border-t pt-2">
-                <p className="text-sm font-semibold mb-1">Linked Food:</p>
-
-                {item.deliveries.map((d: any) => (
-                  <div
-                    key={d.id}
-                    className="text-sm text-gray-600 flex justify-between"
-                  >
-                    <span>{d.food_posts?.title}</span>
-                    <span className="text-xs text-gray-500">
-                      {d.food_posts?.pickup_location}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* ✅ Show button ONLY if no delivery exists */}
-            {(!item.deliveries || item.deliveries.length === 0) && (
-              <button
-                onClick={() => {
-                  setSelectedNeedyId(item.id)
-                  setOpenDeliveryModal(true)
-                }}
-                className="mt-3 bg-green-600 text-white px-3 py-1 rounded"
-              >
-                Available Foods
-              </button>
-            )}
-          </div>
-        ))}
+        {/* Button */}
+        <button
+          onClick={() => {
+            setSelectedNeedyId(item.id)
+            setOpenDeliveryModal(true)
+          }}
+          className="mt-3 bg-green-600 text-white px-3 py-1 rounded"
+        >
+          Deliver Food
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
       </div>
 
       {/* ➕ Add Needy */}
