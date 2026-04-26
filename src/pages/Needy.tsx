@@ -62,7 +62,7 @@ export default function Needy() {
       const filePath = `needy/${Date.now()}-${file.name}`
 
       const { error } = await supabase.storage
-        .from("food-images")
+        .from("needy-images")
         .upload(filePath, file)
 
       if (error) {
@@ -71,7 +71,7 @@ export default function Needy() {
       }
 
       const { data } = supabase.storage
-        .from("food-images")
+        .from("needy-images")
         .getPublicUrl(filePath)
 
       imageUrl = data.publicUrl
